@@ -1,14 +1,5 @@
+is_runing = True
 tasks = []
-
-
-def show_menu():
-    print("\n=== Менеджер задач ===")
-    print("1. Показать задачи")
-    print("2. Добавить задачу")
-    print("3. Редактировать задачу")
-    print("4. Удалить задачу")
-    print("0. Выход")
-
 
 def show_tasks():
     if not tasks:
@@ -74,31 +65,28 @@ def delete_task():
         print("Введите число.")
 
 
-def main():
-    while True:
-        show_menu()
 
-        choice = input("Выберите действие: ")
+while True:
+    
+    print()
+    print("=== Менеджер задач ===")
+    print("1. Показать задачи")
+    print("2. Добавить задачу")
+    print("3. Редактировать задачу")
+    print("4. Удалить задачу")
+    print("5. Выход")
 
-        if choice == "1":
-            show_tasks()
-
-        elif choice == "2":
-            add_task()
-
-        elif choice == "3":
-            edit_task()
-
-        elif choice == "4":
-            delete_task()
-
-        elif choice == "0":
-            print("Выход из программы...")
-            break
-
-        else:
-            print("Неизвестная команда.")
-
-
-if __name__ == "__main__":
-    main()
+	match int(input("Выберите действие: "))
+    	case 1:
+    		show_tasks()
+		case 2:
+        	add_task()
+    	case 3:
+        	edit_task()
+    	case 4:
+        	delete_task()
+    	case 5:
+        	print("Выход из программы...")
+        	exit()
+		case _:
+			print("Неизвестная команда.")
