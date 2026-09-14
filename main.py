@@ -1,6 +1,14 @@
 is_runing = True
 tasks = []
 
+def areYouSerious():
+    confirm = input("Вы уверенны в этом? Да/Нет : ").startswith("")
+    for i in ["n", "not", "нет", "н", "no"]:
+        if confirm == i:
+            return True
+    else:
+        return False
+
 def show_tasks():
     if not tasks:
         print("Список задач пуст.")
@@ -10,7 +18,6 @@ def show_tasks():
 
     for number, task in enumerate(tasks, start=1):
         print(f"{number}. {task}")
-
 
 def add_task():
     task = input("Введите название задачи: ")
@@ -56,17 +63,16 @@ def delete_task():
         number = int(input("Введите номер задачи: ")) - 1
 
         if 0 <= number < len(tasks):
-            deleted_task = tasks.pop(number)
-            print(f"Задача «{deleted_task}» удалена.")
+            if not areYouSerious():
+            	deleted_task = tasks.pop(number)
+            	print(f"Задача «{deleted_task}» удалена.")
         else:
             print("Такой задачи нет.")
 
     except ValueError:
         print("Введите число.")
 
-
-
-while True:
+while is_runing:
     
     print()
     print("=== Менеджер задач ===")
@@ -76,7 +82,7 @@ while True:
     print("4. Удалить задачу")
     print("5. Выход")
 
-	match int(input("Выберите действие: "))
+	match int(input("Выберите действие: ")):
     	case 1:
     		show_tasks()
 		case 2:
@@ -86,7 +92,8 @@ while True:
     	case 4:
         	delete_task()
     	case 5:
-        	print("Выход из программы...")
-        	exit()
+    		confirm = input("Вы действительно хотите выйти? Да/Нет : ")
+            if not areYouSerious():
+    			is_runing = False
 		case _:
 			print("Неизвестная команда.")
