@@ -1,32 +1,46 @@
 is_runing = True
 tasks = []
 
-def areYouSerious():
-    confirm = input("Вы уверенны в этом? Да/Нет : ").startswith("")
-    for i in ["n", "not", "нет", "н", "no"]:
-        if confirm == i:
-            return True
-    else:
-        return False
 
-def show_tasks():
-    if not tasks:
-        print("Список задач пуст.")
+def show_message(message):
+    print(f"\n{message}")
+
+
+def show_collection(collection):
+    if not collection:
+        show_message("Список задач пуст.")
         return
 
     print("\nСписок задач:")
 
-    for number, task in enumerate(tasks, start=1):
-        print(f"{number}. {task}")
+    for number, item in enumerate(collection, start=1):
+        print(f"{number}. {item}")
+
+
+def areYouSerious():
+    confirm = input("Вы уверены в этом? Да/Нет: ").lower().strip()
+
+    match confirm:
+        case "да" | "д" | "yes" | "y":
+            return True
+        case "нет" | "н" | "no" | "n":
+            return False
+        case _:
+            return False
+
+
+def show_tasks():
+    show_collection(tasks)
+
 
 def add_task():
     task = input("Введите название задачи: ")
 
     if task.strip():
         tasks.append(task)
-        print("Задача добавлена.")
+        show_message("Задача добавлена.")
     else:
-        print("Название задачи не может быть пустым.")
+        show_message("Название задачи не может быть пустым.")
 
 
 def edit_task():
@@ -43,14 +57,14 @@ def edit_task():
 
             if new_name.strip():
                 tasks[number] = new_name
-                print("Задача изменена.")
+                show_message("Задача изменена.")
             else:
-                print("Название не может быть пустым.")
+                show_message("Название не может быть пустым.")
         else:
-            print("Такой задачи нет.")
+            show_message("Такой задачи нет.")
 
     except ValueError:
-        print("Введите число.")
+        show_message("Введите число.")
 
 
 def delete_task():
@@ -63,17 +77,19 @@ def delete_task():
         number = int(input("Введите номер задачи: ")) - 1
 
         if 0 <= number < len(tasks):
-            if not areYouSerious():
-            	deleted_task = tasks.pop(number)
-            	print(f"Задача «{deleted_task}» удалена.")
+            if areYouSerious():
+                deleted_task = tasks.pop(number)
+                show_message(f"Задача «{deleted_task}» удалена.")
+            else:
+                show_message("Удаление отменено.")
         else:
-            print("Такой задачи нет.")
+            show_message("Такой задачи нет.")
 
     except ValueError:
-        print("Введите число.")
+        show_message("Введите число.")
+
 
 while is_runing:
-    
     print()
     print("=== Менеджер задач ===")
     print("1. Показать задачи")
@@ -82,18 +98,26 @@ while is_runing:
     print("4. Удалить задачу")
     print("5. Выход")
 
-	match int(input("Выберите действие: ")):
-    	case 1:
-    		show_tasks()
-		case 2:
-        	add_task()
-    	case 3:
-        	edit_task()
-    	case 4:
-        	delete_task()
-    	case 5:
-    		confirm = input("Вы действительно хотите выйти? Да/Нет : ")
-            if not areYouSerious():
-    			is_runing = False
-		case _:
-			print("Неизвестная команда.")
+    try:
+        choice = int(input("Выберите действие: "))
+
+        match choice:
+            case 1:
+                show_tasks()
+            case 2:
+                add_task()
+            case 3:
+                edit_task()
+            case 4:
+                delete_task()
+            case 5:
+                if areYouSerious():
+                    is_runing = False
+                    show_message("Выход из программы.")
+                else:
+                    show_message("Выход отменен.")
+            case _:
+                show_message("Неизвестная команда.")
+
+    except ValueError:
+        show_message("Введите число.")
